@@ -291,6 +291,9 @@ if is_selected "xpad"; then
   sudo apt install -y xpad 
 fi
 
+# FIX Broken installations
+sudo apt --fix-broken install -y
+
 # Final message
 echo ""
 echo "✅ Done! Debian has been pimped based on your selection. Enjoy!"
