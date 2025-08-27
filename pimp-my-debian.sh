@@ -309,6 +309,41 @@ if is_selected "bottles"; then
   sudo apt --fix-broken install -y
   sudo usermod -aG render $USER
   flatpak override --user --filesystem=$HOME com.usebottles.bottles
+  APP_ID="com.usebottles.bottles"
+  echo "📦 Creating Also a Bottles Offline Mode Launcher..."
+  LAUNCHER_NAME="Bottles (Offline)"
+  DESKTOP_FILE="$HOME/.local/share/applications/${APP_ID}-offline.desktop"
+
+  if ! flatpak info "$APP_ID" >/dev/null 2>&1; then
+    echo "AVVISO: l'app $APP_ID non risulta installata con Flatpak."
+  fi
+
+  mkdir -p "$(dirname "$DESKTOP_FILE")"
+
+  cat > "$DESKTOP_FILE" <<EOF
+  [Desktop Entry]
+  Version=1.0
+  Type=Application
+  Name=${LAUNCHER_NAME}
+  Comment=Avvia Bottles in modalità offline (senza rete) e mostra il terminale
+  Exec=flatpak run --unshare=network ${APP_ID}
+  Icon=${APP_ID}
+  Terminal=true
+  TryExec=flatpak
+  Categories=Utility;
+  StartupNotify=true
+EOF
+
+  chmod 644 "$DESKTOP_FILE"
+
+  # Aggiorna il database dei lanciatori (se disponibile)
+  if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "\$HOME/.local/share/applications" || true
+  fi
+
+  echo "Creato: $DESKTOP_FILE"
+  echo "Troverai la voce di menu come: ${LAUNCHER_NAME}"
+
 fi
 
 # Xpad installation
