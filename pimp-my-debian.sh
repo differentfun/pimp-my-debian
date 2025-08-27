@@ -75,7 +75,7 @@ if is_selected "wine"; then
   sudo mkdir -pm755 /etc/apt/keyrings
   sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 
-  echo "Adding WineHQ repo for Debian Bookworm..."
+  echo "Adding WineHQ repo for Debian Trixie..."
   sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/trixie/winehq-trixie.sources
 
   echo "Updating APT..."
