@@ -83,42 +83,50 @@ if is_selected "wine"; then
 
   echo "Installing Wine Staging..."
   sudo apt install --install-recommends winehq-staging -y
+  sudo apt --fix-broken install -y
 fi
 
 # Individual app installations
 if is_selected "krita"; then
   echo "📦 Installing Krita..."
   sudo apt install -y krita
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "filezilla"; then
   echo "📦 Installing FileZilla..."
   sudo apt install -y filezilla
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "putty"; then
   echo "📦 Installing PuTTY..."
   sudo apt install -y putty
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "vlc"; then
   echo "📦 Installing VLC..."
   sudo apt install -y vlc
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "vym"; then
   echo "📦 Installing VYM..."
   sudo apt install -y vym
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "deluge"; then
   echo "📦 Installing Deluge..."
   sudo apt install -y deluge
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "virtualbox"; then
   echo "📦 Installing VirtualBox..."
   sudo apt install -y virtualbox-qt
+  sudo apt --fix-broken install -y
   echo "📦 Fixing VirtualBox No-USB Bug..."
   sudo usermod -aG vboxusers $USER
 fi
@@ -126,41 +134,49 @@ fi
 if is_selected "bleachbit"; then
   echo "📦 Installing BleachBit..."
   sudo apt install -y bleachbit
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "xscreensaver"; then
   echo "📦 Installing Xscreensaver Extra Data..."
   sudo apt install -y xscreensaver-data-extra
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "veracrypt"; then
   echo "📦 Installing VeraCrypt..."
   sudo apt install -y veracrypt
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "pulseaudio"; then
   echo "📦 Installing PulseAudio..."
   sudo apt install -y pulseaudio
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "clipgrab"; then
   echo "📦 Installing ClipGrab..."
   sudo apt install -y clipgrab
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "dosbox"; then
   echo "📦 Installing DOSBox..."
   sudo apt install -y dosbox
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "scummvm"; then
   echo "📦 Installing ScummVM..."
   sudo apt install -y scummvm
+  sudo apt --fix-broken install -y
 fi
 
 if is_selected "fonts-noto-color-emoji"; then
   echo "📦 Installing emoji font..."
   sudo apt install -y fonts-noto-color-emoji
+  sudo apt --fix-broken install -y
 fi
 
 # ONLYOFFICE
@@ -169,6 +185,7 @@ if is_selected "onlyoffice"; then
   wget https://github.com/ONLYOFFICE/DesktopEditors/releases/latest/download/onlyoffice-desktopeditors_amd64.deb
   echo "📦 Installing ONLYOFFICE..."
   sudo dpkg -i onlyoffice-desktopeditors_amd64.deb
+  sudo apt --fix-broken install -y
 fi
 
 # Steam
@@ -177,6 +194,7 @@ if is_selected "steam"; then
   wget https://cdn.fastly.steamstatic.com/client/installer/steam.deb
   echo "📦 Installing Steam..."
   sudo dpkg -i steam.deb
+  sudo apt --fix-broken install -y
 fi
 
 # Google Chrome
@@ -185,6 +203,7 @@ if is_selected "chrome"; then
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   echo "📦 Installing Google Chrome..."
   sudo dpkg -i google-chrome-stable_current_amd64.deb
+  sudo apt --fix-broken install -y
 fi
 
 # MEGAsync
@@ -193,6 +212,7 @@ if is_selected "megasync"; then
   wget https://mega.nz/linux/repo/Debian_13/amd64/megasync-Debian_13_amd64.deb
   echo "📦 Installing MEGAsync..."
   sudo dpkg -i megasync-Debian_13_amd64.deb
+  sudo apt --fix-broken install -y
 fi
 
 # VSCodium
@@ -207,6 +227,7 @@ if is_selected "vscodium"; then
 
   echo "📦 Installing VSCodium..."
   sudo apt update && sudo apt install -y codium
+  sudo apt --fix-broken install -y
 fi
 
 # XClicker
@@ -215,6 +236,7 @@ if is_selected "xclicker"; then
   wget https://github.com/robiot/xclicker/releases/download/v1.5.1/xclicker_1.5.1_amd64.deb
   echo "📦 Installing XClicker..."
   sudo dpkg -i xclicker_1.5.1_amd64.deb
+  sudo apt --fix-broken install -y
 fi
 
 # Raspberry PI Imager
@@ -223,6 +245,7 @@ if is_selected "pi-imager"; then
   wget https://downloads.raspberrypi.com/imager/imager_latest_amd64.deb
   echo "📦 Raspberry PI Imager..."
   sudo dpkg -i imager_latest_amd64.deb
+  sudo apt --fix-broken install -y
 fi
 
 # MeowSQL
@@ -278,10 +301,12 @@ rm -f xclicker_1.5.1_amd64.deb imager_latest_amd64.deb megasync-Debian_13_amd64.
 if is_selected "bottles"; then
   echo "📦 Installing Flatpak and Bottles..."
   sudo apt install -y flatpak
+  sudo apt --fix-broken install -y
   sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   sudo flatpak install -y flathub com.usebottles.bottles
   sudo apt install -y libvkd3d1 libvkd3d-shader1 mesa-vulkan-drivers mesa-vulkan-drivers:i386 vulkan-tools
   sudo apt install -y libvulkan1 libvulkan1:i386 libgl1-mesa-dri libgl1-mesa-dri:i386 libasound2 libasound2:i386 gstreamer1.0-plugins-base gstreamer1.0-plugins-base:i386 gstreamer1.0-plugins-good gstreamer1.0-plugins-good:i386
+  sudo apt --fix-broken install -y
   sudo usermod -aG render $USER
   flatpak override --user --filesystem=$HOME com.usebottles.bottles
 fi
@@ -290,10 +315,8 @@ fi
 if is_selected "xpad"; then
   echo "📦 Installing xpad (Sticky Notes)..."
   sudo apt install -y xpad 
+  sudo apt --fix-broken install -y
 fi
-
-# FIX Broken installations
-sudo apt --fix-broken install -y
 
 # Waydroid installation
 if is_selected "waydroid"; then
@@ -301,6 +324,7 @@ if is_selected "waydroid"; then
   curl -s https://repo.waydro.id | sudo bash -s trixie
   sudo apt update
   sudo apt install -y waydroid
+  sudo apt --fix-broken install -y
 fi
 
 # Final message
