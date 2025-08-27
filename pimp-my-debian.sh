@@ -33,6 +33,7 @@ SELECTION=$(zenity --list --title="DEBIAN PIMP - Select Software to Install" \
   TRUE "fonts-noto-color-emoji" "Emoji font" \
   TRUE "vscodium" "VSCodium" \
   TRUE "xpad" "Xpad (sticky notes)" \
+  TRUE "waydroid" "Waydroid" \
   --separator=":")
 
 # Exit if user cancels
@@ -293,6 +294,14 @@ fi
 
 # FIX Broken installations
 sudo apt --fix-broken install -y
+
+# Waydroid installation
+if is_selected "waydroid"; then
+  echo "📦 Installing Waydroid..."
+  curl -s https://repo.waydro.id | sudo bash -s trixie
+  sudo apt update
+  sudo apt install -y waydroid
+fi
 
 # Final message
 echo ""
