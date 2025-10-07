@@ -310,6 +310,104 @@ if is_selected "bottles"; then
   sudo usermod -aG render $USER
   flatpak override --user --filesystem=$HOME com.usebottles.bottles
   APP_ID="com.usebottles.bottles"
+
+  echo "⬇️ Preparing VKD3D component for Bottles..."
+  BOTTLES_DATA_DIR="$HOME/.var/app/com.usebottles.bottles/data/bottles"
+  mkdir -p "$BOTTLES_DATA_DIR/vkd3d"
+
+  if command -v python3 >/dev/null 2>&1; then
+    if VKD3D_URL=$(curl -sf https://api.github.com/repos/bottlesdevs/components/releases | python3 -c 'import json, sys
+data = json.load(sys.stdin)
+for release in data:
+    for asset in release.get("assets", []):
+        name = asset.get("name", "")
+        if name.startswith("vkd3d-proton") and name.endswith(".tar.gz"):
+            print(asset["browser_download_url"])
+            raise SystemExit
+sys.exit(1)' 2>/dev/null); then
+      TMP_VKD3D_DIR=$(mktemp -d)
+      if curl -L --fail -o "$TMP_VKD3D_DIR/vkd3d.tar.gz" "$VKD3D_URL"; then
+        if tar -C "$TMP_VKD3D_DIR" -xzf "$TMP_VKD3D_DIR/vkd3d.tar.gz"; then
+          EXTRACTED_DIR=$(find "$TMP_VKD3D_DIR" -mindepth 1 -maxdepth 1 -type d -print -quit)
+          if [ -n "$EXTRACTED_DIR" ]; then
+            VKD3D_PACK_NAME=$(basename "$EXTRACTED_DIR")
+            DEST_DIR="$BOTTLES_DATA_DIR/vkd3d/$VKD3D_PACK_NAME"
+            rm -rf "$DEST_DIR"
+            mv "$EXTRACTED_DIR" "$BOTTLES_DATA_DIR/vkd3d/" && echo "✅ VKD3D pronto: $VKD3D_PACK_NAME"
+
+            if [ -d "$BOTTLES_DATA_DIR/bottles" ]; then
+              for bottle_path in "$BOTTLES_DATA_DIR"/bottles/*; do
+                [ -d "$bottle_path" ] || continue
+                bottle_name=$(basename "$bottle_path")
+                echo "🔧 Aggiorno la bottle \"$bottle_name\" con VKD3D..."
+                flatpak run --command=bottles-cli "$APP_ID" edit -b "$bottle_name" --vkd3d "$VKD3D_PACK_NAME" || echo "⚠️ Impossibile aggiornare la bottle \"$bottle_name\""
+              done
+            fi
+          else
+            echo "⚠️ Estratto VKD3D ma non trovo la directory risultante, passo oltre."
+          fi
+        else
+          echo "⚠️ Impossibile estrarre l'archivio VKD3D."
+        fi
+      else
+        echo "⚠️ Download del componente VKD3D non riuscito."
+      fi
+      rm -rf "$TMP_VKD3D_DIR"
+    else
+      echo "⚠️ Nessun asset VKD3D trovato sull'API di Bottles, installazione manuale richiesta."
+    fi
+  else
+    echo "⚠️ python3 non disponibile, salto la preparazione di VKD3D."
+  fi
+
+  echo "⬇️ Preparing DXVK-NVAPI component for Bottles..."
+  mkdir -p "$BOTTLES_DATA_DIR/nvapi"
+
+  if command -v python3 >/dev/null 2>&1; then
+    if DXVK_NVAPI_URL=$(curl -sf https://api.github.com/repos/bottlesdevs/components/releases | python3 -c 'import json, sys
+data = json.load(sys.stdin)
+for release in data:
+    for asset in release.get("assets", []):
+        name = asset.get("name", "")
+        if name.startswith("dxvk-nvapi") and name.endswith(".tar.gz"):
+            print(asset["browser_download_url"])
+            raise SystemExit
+sys.exit(1)' 2>/dev/null); then
+      TMP_NVAPI_DIR=$(mktemp -d)
+      if curl -L --fail -o "$TMP_NVAPI_DIR/dxvk-nvapi.tar.gz" "$DXVK_NVAPI_URL"; then
+        if tar -C "$TMP_NVAPI_DIR" -xzf "$TMP_NVAPI_DIR/dxvk-nvapi.tar.gz"; then
+          EXTRACTED_NVAPI_DIR=$(find "$TMP_NVAPI_DIR" -mindepth 1 -maxdepth 1 -type d -print -quit)
+          if [ -n "$EXTRACTED_NVAPI_DIR" ]; then
+            DXVK_NVAPI_PACK_NAME=$(basename "$EXTRACTED_NVAPI_DIR")
+            DEST_NVAPI_DIR="$BOTTLES_DATA_DIR/nvapi/$DXVK_NVAPI_PACK_NAME"
+            rm -rf "$DEST_NVAPI_DIR"
+            mv "$EXTRACTED_NVAPI_DIR" "$BOTTLES_DATA_DIR/nvapi/" && echo "✅ DXVK-NVAPI pronto: $DXVK_NVAPI_PACK_NAME"
+
+            if [ -d "$BOTTLES_DATA_DIR/bottles" ]; then
+              for bottle_path in "$BOTTLES_DATA_DIR"/bottles/*; do
+                [ -d "$bottle_path" ] || continue
+                bottle_name=$(basename "$bottle_path")
+                echo "🔧 Aggiorno la bottle \"$bottle_name\" con DXVK-NVAPI..."
+                flatpak run --command=bottles-cli "$APP_ID" edit -b "$bottle_name" --nvapi "$DXVK_NVAPI_PACK_NAME" || echo "⚠️ Impossibile aggiornare la bottle \"$bottle_name\" con DXVK-NVAPI"
+              done
+            fi
+          else
+            echo "⚠️ Estratto DXVK-NVAPI ma non trovo la directory risultante, passo oltre."
+          fi
+        else
+          echo "⚠️ Impossibile estrarre l'archivio DXVK-NVAPI."
+        fi
+      else
+        echo "⚠️ Download del componente DXVK-NVAPI non riuscito."
+      fi
+      rm -rf "$TMP_NVAPI_DIR"
+    else
+      echo "⚠️ Nessun asset DXVK-NVAPI trovato sull'API di Bottles, installazione manuale richiesta."
+    fi
+  else
+    echo "⚠️ python3 non disponibile, salto la preparazione di DXVK-NVAPI."
+  fi
+
   echo "📦 Creating Also a Bottles Offline Mode Launcher..."
   LAUNCHER_NAME="Bottles (Offline)"
   DESKTOP_FILE="$HOME/.local/share/applications/${APP_ID}-offline.desktop"
