@@ -33,6 +33,7 @@ show_selection() {
     TRUE "samba-autofix" "Installa and Autofix SAMBA" \
     TRUE "scummvm" "ScummVM" \
     TRUE "steam" "Steam Client" \
+    TRUE "unrar" "Unrar" \
     TRUE "vscodium" "VSCodium" \
     TRUE "veracrypt" "VeraCrypt" \
     TRUE "vlc" "VLC Media Player" \

@@ -119,6 +119,10 @@ if is_selected "pulseaudio"; then
   install_apt_app "PulseAudio" pulseaudio
 fi
 
+if is_selected "unrar"; then
+  install_apt_app "Unrar" unrar
+fi
+
 if is_selected "clipgrab"; then
   install_apt_app "ClipGrab" clipgrab
 fi

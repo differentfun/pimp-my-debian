@@ -48,6 +48,7 @@
 - SAMBA Autofix
 - ScummVM
 - Steam Client
+- Unrar
 - VeraCrypt
 - VLC Media Player
 - VSCodium
